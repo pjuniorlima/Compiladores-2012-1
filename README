@@ -1,0 +1,7 @@
+Trabalho da Disciplina de Compiladores realizada no primeiro período de 2012.
+
+Execute:
+
+$ make cezinho
+
+para gerar o analisador léxico.
