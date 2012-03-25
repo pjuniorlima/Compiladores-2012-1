@@ -1,7 +1,8 @@
 %{
-	#include "cezinho.tab.h"
+//	#include "cezinho.tab.h"
 	#define BUFFSIZE 800
 		extern char* constString;
+	
 %}
 
 CHAR		['][!-~][']
@@ -14,43 +15,43 @@ NUMBER		{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
 %%
 
 programa {
-		return(PROGRAMA);
+		return PROGRAMA;
 	}
 
 int	{
-		return(INT);
+		return INT;
 	}
 
 retorne	{
-		return(RETORNE);
+		return RETORNE;
 	}
 
 leia	{
-		return(LEIA);
+		return LEIA;
 	}
 
 escreva	{
-		return(ESCREVA);
+		return ESCREVA;
 	}
 
 novalinha	{
-		return(NOVALINHA);
+		return NOVALINHA;
 	}
 
 se	{
-		return(SE);
+		return SE;
 	}
 
 entao	{
-		return(ENTAO);
+		return ENTAO;
 	}
 
 enquanto	{
-		return(ENQUANTO);
+		return ENQUANTO;
 	}
 
 execute	{
-		return(EXECUTE);
+		return EXECUTE;
 	}
 "\""	{
 		register int x;
@@ -76,59 +77,62 @@ execute	{
 				return 1;
 			}
 			constString[i] = '\0';
-			return(CADEIACARACTERES);
+			return CADEIACARACTERES;
 
 	}
 
 "!="	{
-		return(DIFERENTE);
+		return DIFERENTE;
 	}
 
 "=="	{
-		return(IGUAL);
+		return IGUAL;
 	}
 
 ">"	{
-		return(MAIOR);
+		return MAIOR;
 	}
 
 "<"	{
-		return(MENOR);
+		return MENOR;
 	}
 
 "<="	{
-		return(MENORIGUAL)
+		return MENORIGUAL;
 	}
 
 ">="	{
-		return(MAIORIGUAL)
+		return MAIORIGUAL;
 	}
 
+{DIGIT}+	{
+		yylval=atoi(yytext);
+		return (INTCONST);
+	}
 
+{CHAR}	{
+		return (CHARCONST);
+	}
 
+{ID}+	{
+		return (IDENTIFICADOR);
+	}
 
+{WHITESPACE}
 
+.	{
+		printf("Caractere inválido %s.\n", yytext);
+		return (-1);
+	}
 
+%%
 
+int yywrap();
+main(){
+	yylex();
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+int yywrap(){
+	return 1;
+}
+	
