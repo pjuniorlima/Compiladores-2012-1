@@ -519,10 +519,11 @@ char *yytext;
 #line 1 "cezinho.l"
 #line 2 "cezinho.l"
 //	#include "cezinho.tab.h"
+	#include <stdio.h>
 	#define BUFFSIZE 800
 		extern char* constString;
 	
-#line 526 "lex.yy.c"
+#line 527 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -709,10 +710,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 15 "cezinho.l"
+#line 16 "cezinho.l"
 
 
-#line 716 "lex.yy.c"
+#line 717 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -797,77 +798,77 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 17 "cezinho.l"
+#line 18 "cezinho.l"
 {
 		return PROGRAMA;
 	}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 21 "cezinho.l"
+#line 22 "cezinho.l"
 {
 		return INT;
 	}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 25 "cezinho.l"
+#line 26 "cezinho.l"
 {
 		return RETORNE;
 	}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 29 "cezinho.l"
+#line 30 "cezinho.l"
 {
 		return LEIA;
 	}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 33 "cezinho.l"
+#line 34 "cezinho.l"
 {
 		return ESCREVA;
 	}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 37 "cezinho.l"
+#line 38 "cezinho.l"
 {
 		return NOVALINHA;
 	}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 41 "cezinho.l"
+#line 42 "cezinho.l"
 {
 		return SE;
 	}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 45 "cezinho.l"
+#line 46 "cezinho.l"
 {
 		return ENTAO;
 	}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 49 "cezinho.l"
+#line 50 "cezinho.l"
 {
 		return ENQUANTO;
 	}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 53 "cezinho.l"
+#line 54 "cezinho.l"
 {
 		return EXECUTE;
 	}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 56 "cezinho.l"
+#line 57 "cezinho.l"
 {
 		register int x;
 		if(constString)
@@ -877,6 +878,7 @@ YY_RULE_SETUP
 				return 1;
 			}
 			int i=0;
+			char c;
 			while((c=input()) != '\"' && c != EOF && c != '\n'){
 				constString[i++]=c;
 				if(i==BUFFSIZE){
@@ -898,64 +900,64 @@ YY_RULE_SETUP
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 84 "cezinho.l"
+#line 86 "cezinho.l"
 {
 		return DIFERENTE;
 	}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 88 "cezinho.l"
+#line 90 "cezinho.l"
 {
 		return IGUAL;
 	}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 92 "cezinho.l"
+#line 94 "cezinho.l"
 {
 		return MAIOR;
 	}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 96 "cezinho.l"
+#line 98 "cezinho.l"
 {
 		return MENOR;
 	}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 100 "cezinho.l"
+#line 102 "cezinho.l"
 {
 		return MENORIGUAL;
 	}
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 104 "cezinho.l"
+#line 106 "cezinho.l"
 {
 		return MAIORIGUAL;
 	}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 108 "cezinho.l"
+#line 110 "cezinho.l"
 {
-		yylval=atoi(yytext);
+		*yylval=atoi(yytext);
 		return (INTCONST);
 	}
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 113 "cezinho.l"
+#line 115 "cezinho.l"
 {
 		return (CHARCONST);
 	}
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 117 "cezinho.l"
+#line 119 "cezinho.l"
 {
 		return (IDENTIFICADOR);
 	}
@@ -963,12 +965,12 @@ YY_RULE_SETUP
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 121 "cezinho.l"
+#line 123 "cezinho.l"
 
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 123 "cezinho.l"
+#line 125 "cezinho.l"
 {
 		printf("Caractere inválido %s.\n", yytext);
 		return (-1);
@@ -976,10 +978,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 128 "cezinho.l"
+#line 130 "cezinho.l"
 ECHO;
 	YY_BREAK
-#line 983 "lex.yy.c"
+#line 985 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1977,7 +1979,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 128 "cezinho.l"
+#line 130 "cezinho.l"
 
 
 

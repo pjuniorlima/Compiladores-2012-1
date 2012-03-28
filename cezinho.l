@@ -1,5 +1,6 @@
 %{
 //	#include "cezinho.tab.h"
+	#include <stdio.h>
 	#define BUFFSIZE 800
 		extern char* constString;
 	
@@ -62,6 +63,7 @@ execute	{
 				return 1;
 			}
 			int i=0;
+			char c;
 			while((c=input()) != '\"' && c != EOF && c != '\n'){
 				constString[i++]=c;
 				if(i==BUFFSIZE){
@@ -106,7 +108,7 @@ execute	{
 	}
 
 {DIGIT}+	{
-		yylval=atoi(yytext);
+		*yylval=atoi(yytext);
 		return (INTCONST);
 	}
 
