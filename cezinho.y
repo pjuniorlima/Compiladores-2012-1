@@ -158,3 +158,20 @@ PrimExpr:	id '(' ListExpr ')'
 ListExpr:	AssignExpr
 		| ListExpr ';' AssignExpr
 ;
+%%
+void yyerror(char const* msg){
+	printf("%s -- Linha %d\n", msg, yylineno);
+}
+int main(int argc, char** argv){
+	if(argc != 2){
+		printf("Uso: cezinho <nome>\n");
+		exit(1);
+	}
+	yyin=fopen(argv[1], "rt");
+	if(yyin)
+		return yyparse();
+	else
+		yyerror("arquivo não encontrado.\n");
+	return 1;
+}
+		
