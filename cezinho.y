@@ -24,37 +24,33 @@
 %token senao
 %token enquanto
 %token execute
-%token leia
 %token atribuicao
 
 %error-verbose
 %%
 Programa:	DeclFuncVar DeclProg
-
 ;
 DeclFuncVar:	Tipo id DeclVar ';' DeclFuncVar
-		| Tipo id '[' INTCONST ']' DeclVar ';' DeclFuncVar
-
+		| Tipo id '[' intconst ']' DeclVar ';' DeclFuncVar
 		| Tipo id DeclFunc DeclFuncVar
 ;
 
 DeclProg:	programa Bloco
 ;
 
-DeclVar:	' '
+DeclVar:	
 		| ',' id DeclVar
 
-		| ',' id '[' INTCONST ']' DeclVar
+		| ',' id '[' intconst ']' DeclVar
 ;
 DeclFunc:	'(' ListaParametros ')' Bloco
 ;
 
-ListaParametros:	' '
+ListaParametros:	
 		| ListaParametrosCont
 ;
 
 ListaParametrosCont:	Tipo id
-
 		| Tipo id '[' ']'
 		| Tipo id ',' ListaParametrosCont
 		| Tipo id '[' ']' ',' ListaParametrosCont
@@ -62,9 +58,9 @@ ListaParametrosCont:	Tipo id
 Bloco:		'{' ListaDeclVar ListaComando '}'
 		| '{' ListaDeclVar '}'
 ;
-ListaDeclVar:	' '
+ListaDeclVar:	
 		| Tipo id DeclVar ';' ListaDeclVar
-		| Tipo id '[' INTCONST ']' DeclVar ';' ListaDeclVar
+		| Tipo id '[' intconst ']' DeclVar ';' ListaDeclVar
 ;
 
 Tipo:		int
@@ -94,7 +90,7 @@ Expr:		AssignExpr
 ;
 
 AssignExpr:	CondExpr
-		| LValueExpr=AssignExpr
+		| LValueExpr '=' AssignExpr
 ;
 
 CondExpr:	OrExpr
@@ -136,7 +132,6 @@ MulExpr:	MulExpr '*' UnExpr
 ;
 
 UnExpr:		PrimExpr
-
 		| '!' PrimExpr
 		| PrimExpr
 ;
@@ -146,7 +141,6 @@ LValueExpr:	id '[' Expr ']'
 ;
 
 PrimExpr:	id '(' ListExpr ')'
-
 		| id '(' ')'
 		| id '[' Expr ']'
 		| id
