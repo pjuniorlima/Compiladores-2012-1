@@ -96,22 +96,22 @@ CondExpr:	OrExpr
 		| OrExpr '?' Expr ':' CondExpr
 ;
 
-OrExpr:		OrExpr 'o''u' AndExpr
+OrExpr:		OrExpr 'ou' AndExpr
 		| AndExpr
 ;
 AndExpr:	AndExpr 'e' EqExpr
 		| EqExpr
 ;
 
-EqExpr:		EqExpr '=''=' DesigExpr
-		| EqExpr '!''=' DesigExpr
+EqExpr:		EqExpr '==' DesigExpr
+		| EqExpr '!=' DesigExpr
 		| DesigExpr
 ;
 
 DesigExpr:	DesigExpr '<' AddExpr
 		| DesigExpr '>' AddExpr
-		| DesigExpr '>''=' AddExpr
-		| DesigExpr '<''=' AddExpr
+		| DesigExpr '>=' AddExpr
+		| DesigExpr '<=' AddExpr
 		| AddExpr
 ;
 
