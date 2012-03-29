@@ -28,6 +28,7 @@
 
 %error-verbose
 %%
+
 Programa:	DeclFuncVar DeclProg
 ;
 DeclFuncVar:	Tipo id DeclVar ';' DeclFuncVar
@@ -97,22 +98,22 @@ CondExpr:	OrExpr
 		| OrExpr '?' Expr ':' CondExpr
 ;
 
-OrExpr:		OrExpr 'ou' AndExpr
+OrExpr:		OrExpr 'o''u' AndExpr
 		| AndExpr
 ;
 AndExpr:	AndExpr 'e' EqExpr
 		| EqExpr
 ;
 
-EqExpr:		EqExpr '==' DesigExpr
-		| EqExpr '!=' DesigExpr
+EqExpr:		EqExpr '=''=' DesigExpr
+		| EqExpr '!''=' DesigExpr
 		| DesigExpr
 ;
 
 DesigExpr:	DesigExpr '<' AddExpr
 		| DesigExpr '>' AddExpr
-		| DesigExpr '>=' AddExpr
-		| DesigExpr '<=' AddExpr
+		| DesigExpr '>''=' AddExpr
+		| DesigExpr '<''=' AddExpr
 		| AddExpr
 ;
 
