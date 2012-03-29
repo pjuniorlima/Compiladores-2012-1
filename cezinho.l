@@ -1,6 +1,5 @@
 %{
-//	#include "cezinho.tab.h"
-	#include <stdio.h>
+	#include "cezinho.tab.h"
 	#define BUFFSIZE 800
 		extern char* constString;
 	

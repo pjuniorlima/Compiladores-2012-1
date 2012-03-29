@@ -8,41 +8,41 @@
 	char* constString=NULL;
 %}
 
-%token programa
-%token car
-%token carconst
-%token id
-%token int
-%token intconst
-%token retorne
-%token leia
-%token escreva
-%token cadeiaCaracteres
-%token novalinha
-%token se
-%token entao
-%token senao
-%token enquanto
-%token execute
-%token atribuicao
+%token PROGRAMA
+%token CAR
+%token CARCONST
+%token IDENTIFICADOR
+%token INT
+%token INTCONST
+%token RETORNE
+%token LEIA
+%token ESCREVA
+%token CADEIACARACTERES
+%token NOVALINHA
+%token SE 
+%token ENTAO
+%token SENAO
+%token ENQUANTO
+%token EXECUTE
+%token ATRIBUICAI
 
 %error-verbose
 %%
 
 Programa:	DeclFuncVar DeclProg
 ;
-DeclFuncVar:	Tipo id DeclVar ';' DeclFuncVar
-		| Tipo id '[' intconst ']' DeclVar ';' DeclFuncVar
-		| Tipo id DeclFunc DeclFuncVar
+DeclFuncVar:	Tipo IDENTIFICADOR DeclVar ';' DeclFuncVar
+		| Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' DeclFuncVar
+		| Tipo IDENTIFICADOR DeclFunc 
 ;
 
-DeclProg:	programa Bloco
+DeclProg:	PROGRAMA Bloco
 ;
 
 DeclVar:	
-		| ',' id DeclVar
+		| ',' IDENTIFICADOR DeclVar
 
-		| ',' id '[' intconst ']' DeclVar
+		| ',' IDENTIFICADOR '[' INTCONST ']' DeclVar
 ;
 DeclFunc:	'(' ListaParametros ')' Bloco
 ;
@@ -51,21 +51,21 @@ ListaParametros:
 		| ListaParametrosCont
 ;
 
-ListaParametrosCont:	Tipo id
-		| Tipo id '[' ']'
-		| Tipo id ',' ListaParametrosCont
-		| Tipo id '[' ']' ',' ListaParametrosCont
+ListaParametrosCont:	Tipo IDENTIFICADOR
+		| Tipo IDENTIFICADOR '[' ']'
+		| Tipo IDENTIFICADOR ',' ListaParametrosCont
+		| Tipo IDENTIFICADOR '[' ']' ',' ListaParametrosCont
 ; 
 Bloco:		'{' ListaDeclVar ListaComando '}'
 		| '{' ListaDeclVar '}'
 ;
 ListaDeclVar:	
-		| Tipo id DeclVar ';' ListaDeclVar
-		| Tipo id '[' intconst ']' DeclVar ';' ListaDeclVar
+		| Tipo IDENTIFICADOR DeclVar ';' ListaDeclVar
+		| Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' ListaDeclVar
 ;
 
-Tipo:		int
-		| car
+Tipo:		INT
+		| CAR
 ;
 
 ListaComando:	Comando
@@ -74,16 +74,14 @@ ListaComando:	Comando
 
 Comando:	';'
 		| Expr ';'
-		| retorne Expr ';'
-		| leia LValueExpr ';'
-		| escreva Expr ';'
-		| escreva cadeiaCaracteres ';'
-		| novalinha ';'
-		| se '(' Expr ')' entao Comando
-
-		| se '(' Expr ')' entao Comando senao Comando
-
-		| enquanto '(' Expr ')' execute Comando
+		| RETORNE Expr ';'
+		| LEIA LValueExpr ';'
+		| ESCREVA Expr ';'
+		| ESCREVA CADEIACARACTERES ';'
+		| NOVALINHA ';'
+		| SE '(' Expr ')' ENTAO Comando
+		| SE '(' Expr ')' ENTAO Comando SENAO Comando
+		| ENQUANTO '(' Expr ')' EXECUTE Comando
 		| Bloco
 ;
 
@@ -137,16 +135,16 @@ UnExpr:		PrimExpr
 		| PrimExpr
 ;
 
-LValueExpr:	id '[' Expr ']'
-		| id
+LValueExpr:	IDENTIFICADOR '[' Expr ']'
+		| IDENTIFICADOR
 ;
 
-PrimExpr:	id '(' ListExpr ')'
-		| id '(' ')'
-		| id '[' Expr ']'
-		| id
-		| carconst
-		| intconst
+PrimExpr:	IDENTIFICADOR '(' ListExpr ')'
+		| IDENTIFICADOR '(' ')'
+		| IDENTIFICADOR '[' Expr ']'
+		| IDENTIFICADOR
+		| CARCONST
+		| INTCONST
 		| '(' Expr ')'
 ;
 

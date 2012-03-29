@@ -1,0 +1,2104 @@
+Terminais não utilizados na gramática
+
+   ATRIBUICAI
+
+
+Regras inúteis no analisador devido a conflitos
+
+   62 UnExpr: PrimExpr
+
+
+Estado 26 conflitos: 1 de redução/redução
+Estado 49 conflitos: 1 de deslocamento/redução
+Estado 52 conflitos: 15 de redução/redução
+Estado 118 conflitos: 1 de deslocamento/redução
+Estado 119 conflitos: 1 de deslocamento/redução
+Estado 130 conflitos: 1 de redução/redução
+Estado 156 conflitos: 1 de deslocamento/redução
+
+
+Gramática
+
+    0 $accept: Programa $end
+
+    1 Programa: DeclFuncVar DeclProg
+
+    2 DeclFuncVar: Tipo IDENTIFICADOR DeclVar ';' DeclFuncVar
+    3            | Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' DeclFuncVar
+    4            | Tipo IDENTIFICADOR DeclFunc
+
+    5 DeclProg: PROGRAMA Bloco
+
+    6 DeclVar: /* vazio */
+    7        | ',' IDENTIFICADOR DeclVar
+    8        | ',' IDENTIFICADOR '[' INTCONST ']' DeclVar
+
+    9 DeclFunc: '(' ListaParametros ')' Bloco
+
+   10 ListaParametros: /* vazio */
+   11                | ListaParametrosCont
+
+   12 ListaParametrosCont: Tipo IDENTIFICADOR
+   13                    | Tipo IDENTIFICADOR '[' ']'
+   14                    | Tipo IDENTIFICADOR ',' ListaParametrosCont
+   15                    | Tipo IDENTIFICADOR '[' ']' ',' ListaParametrosCont
+
+   16 Bloco: '{' ListaDeclVar ListaComando '}'
+   17      | '{' ListaDeclVar '}'
+
+   18 ListaDeclVar: /* vazio */
+   19             | Tipo IDENTIFICADOR DeclVar ';' ListaDeclVar
+   20             | Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' ListaDeclVar
+
+   21 Tipo: INT
+   22     | CAR
+
+   23 ListaComando: Comando
+   24             | Comando ListaComando
+
+   25 Comando: ';'
+   26        | Expr ';'
+   27        | RETORNE Expr ';'
+   28        | LEIA LValueExpr ';'
+   29        | ESCREVA Expr ';'
+   30        | ESCREVA CADEIACARACTERES ';'
+   31        | NOVALINHA ';'
+   32        | SE '(' Expr ')' ENTAO Comando
+   33        | SE '(' Expr ')' ENTAO Comando SENAO Comando
+   34        | ENQUANTO '(' Expr ')' EXECUTE Comando
+   35        | Bloco
+
+   36 Expr: AssignExpr
+
+   37 AssignExpr: CondExpr
+   38           | LValueExpr '=' AssignExpr
+
+   39 CondExpr: OrExpr
+   40         | OrExpr '?' Expr ':' CondExpr
+
+   41 OrExpr: OrExpr 'o' 'u' AndExpr
+   42       | AndExpr
+
+   43 AndExpr: AndExpr 'e' EqExpr
+   44        | EqExpr
+
+   45 EqExpr: EqExpr '=' '=' DesigExpr
+   46       | EqExpr '!' '=' DesigExpr
+   47       | DesigExpr
+
+   48 DesigExpr: DesigExpr '<' AddExpr
+   49          | DesigExpr '>' AddExpr
+   50          | DesigExpr '>' '=' AddExpr
+   51          | DesigExpr '<' '=' AddExpr
+   52          | AddExpr
+
+   53 AddExpr: AddExpr '+' MulExpr
+   54        | AddExpr '-' MulExpr
+   55        | MulExpr
+
+   56 MulExpr: MulExpr '*' UnExpr
+   57        | MulExpr '=' UnExpr
+   58        | MulExpr '%' UnExpr
+   59        | UnExpr
+
+   60 UnExpr: PrimExpr
+   61       | '!' PrimExpr
+   62       | PrimExpr
+
+   63 LValueExpr: IDENTIFICADOR '[' Expr ']'
+   64           | IDENTIFICADOR
+
+   65 PrimExpr: IDENTIFICADOR '(' ListExpr ')'
+   66         | IDENTIFICADOR '(' ')'
+   67         | IDENTIFICADOR '[' Expr ']'
+   68         | IDENTIFICADOR
+   69         | CARCONST
+   70         | INTCONST
+   71         | '(' Expr ')'
+
+   72 ListExpr: AssignExpr
+   73         | ListExpr ';' AssignExpr
+
+
+Terminais, com as regras onde eles aparecem
+
+$end (0) 0
+'!' (33) 46 61
+'%' (37) 58
+'(' (40) 9 32 33 34 65 66 71
+')' (41) 9 32 33 34 65 66 71
+'*' (42) 56
+'+' (43) 53
+',' (44) 7 8 14 15
+'-' (45) 54
+':' (58) 40
+';' (59) 2 3 19 20 25 26 27 28 29 30 31 73
+'<' (60) 48 51
+'=' (61) 38 45 46 50 51 57
+'>' (62) 49 50
+'?' (63) 40
+'[' (91) 3 8 13 15 20 63 67
+']' (93) 3 8 13 15 20 63 67
+'e' (101) 43
+'o' (111) 41
+'u' (117) 41
+'{' (123) 16 17
+'}' (125) 16 17
+error (256)
+PROGRAMA (258) 5
+CAR (259) 22
+CARCONST (260) 69
+IDENTIFICADOR (261) 2 3 4 7 8 12 13 14 15 19 20 63 64 65 66 67 68
+INT (262) 21
+INTCONST (263) 3 8 20 70
+RETORNE (264) 27
+LEIA (265) 28
+ESCREVA (266) 29 30
+CADEIACARACTERES (267) 30
+NOVALINHA (268) 31
+SE (269) 32 33
+ENTAO (270) 32 33
+SENAO (271) 33
+ENQUANTO (272) 34
+EXECUTE (273) 34
+ATRIBUICAI (274)
+
+
+Não-terminais com as regras onde eles aparecem
+
+$accept (41)
+    à esquerda: 0
+Programa (42)
+    à esquerda: 1, à direita: 0
+DeclFuncVar (43)
+    à esquerda: 2 3 4, à direita: 1 2 3
+DeclProg (44)
+    à esquerda: 5, à direita: 1
+DeclVar (45)
+    à esquerda: 6 7 8, à direita: 2 3 7 8 19 20
+DeclFunc (46)
+    à esquerda: 9, à direita: 4
+ListaParametros (47)
+    à esquerda: 10 11, à direita: 9
+ListaParametrosCont (48)
+    à esquerda: 12 13 14 15, à direita: 11 14 15
+Bloco (49)
+    à esquerda: 16 17, à direita: 5 9 35
+ListaDeclVar (50)
+    à esquerda: 18 19 20, à direita: 16 17 19 20
+Tipo (51)
+    à esquerda: 21 22, à direita: 2 3 4 12 13 14 15 19 20
+ListaComando (52)
+    à esquerda: 23 24, à direita: 16 24
+Comando (53)
+    à esquerda: 25 26 27 28 29 30 31 32 33 34 35, à direita: 23 24
+    32 33 34
+Expr (54)
+    à esquerda: 36, à direita: 26 27 29 32 33 34 40 63 67 71
+AssignExpr (55)
+    à esquerda: 37 38, à direita: 36 38 72 73
+CondExpr (56)
+    à esquerda: 39 40, à direita: 37 40
+OrExpr (57)
+    à esquerda: 41 42, à direita: 39 40 41
+AndExpr (58)
+    à esquerda: 43 44, à direita: 41 42 43
+EqExpr (59)
+    à esquerda: 45 46 47, à direita: 43 44 45 46
+DesigExpr (60)
+    à esquerda: 48 49 50 51 52, à direita: 45 46 47 48 49 50 51
+AddExpr (61)
+    à esquerda: 53 54 55, à direita: 48 49 50 51 52 53 54
+MulExpr (62)
+    à esquerda: 56 57 58 59, à direita: 53 54 55 56 57 58
+UnExpr (63)
+    à esquerda: 60 61 62, à direita: 56 57 58 59
+LValueExpr (64)
+    à esquerda: 63 64, à direita: 28 38
+PrimExpr (65)
+    à esquerda: 65 66 67 68 69 70 71, à direita: 60 61 62
+ListExpr (66)
+    à esquerda: 72 73, à direita: 65 73
+
+
+estado 0
+
+    0 $accept: . Programa $end
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    Programa     ir ao estado 3
+    DeclFuncVar  ir ao estado 4
+    Tipo         ir ao estado 5
+
+
+estado 1
+
+   22 Tipo: CAR .
+
+    $padrão  reduzir usando a regra 22 (Tipo)
+
+
+estado 2
+
+   21 Tipo: INT .
+
+    $padrão  reduzir usando a regra 21 (Tipo)
+
+
+estado 3
+
+    0 $accept: Programa . $end
+
+    $end  deslocar, e ir ao estado 6
+
+
+estado 4
+
+    1 Programa: DeclFuncVar . DeclProg
+
+    PROGRAMA  deslocar, e ir ao estado 7
+
+    DeclProg  ir ao estado 8
+
+
+estado 5
+
+    2 DeclFuncVar: Tipo . IDENTIFICADOR DeclVar ';' DeclFuncVar
+    3            | Tipo . IDENTIFICADOR '[' INTCONST ']' DeclVar ';' DeclFuncVar
+    4            | Tipo . IDENTIFICADOR DeclFunc
+
+    IDENTIFICADOR  deslocar, e ir ao estado 9
+
+
+estado 6
+
+    0 $accept: Programa $end .
+
+    $padrão  aceitar
+
+
+estado 7
+
+    5 DeclProg: PROGRAMA . Bloco
+
+    '{'  deslocar, e ir ao estado 10
+
+    Bloco  ir ao estado 11
+
+
+estado 8
+
+    1 Programa: DeclFuncVar DeclProg .
+
+    $padrão  reduzir usando a regra 1 (Programa)
+
+
+estado 9
+
+    2 DeclFuncVar: Tipo IDENTIFICADOR . DeclVar ';' DeclFuncVar
+    3            | Tipo IDENTIFICADOR . '[' INTCONST ']' DeclVar ';' DeclFuncVar
+    4            | Tipo IDENTIFICADOR . DeclFunc
+
+    '['  deslocar, e ir ao estado 12
+    ','  deslocar, e ir ao estado 13
+    '('  deslocar, e ir ao estado 14
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar   ir ao estado 15
+    DeclFunc  ir ao estado 16
+
+
+estado 10
+
+   16 Bloco: '{' . ListaDeclVar ListaComando '}'
+   17      | '{' . ListaDeclVar '}'
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 18 (ListaDeclVar)
+
+    ListaDeclVar  ir ao estado 17
+    Tipo          ir ao estado 18
+
+
+estado 11
+
+    5 DeclProg: PROGRAMA Bloco .
+
+    $padrão  reduzir usando a regra 5 (DeclProg)
+
+
+estado 12
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' . INTCONST ']' DeclVar ';' DeclFuncVar
+
+    INTCONST  deslocar, e ir ao estado 19
+
+
+estado 13
+
+    7 DeclVar: ',' . IDENTIFICADOR DeclVar
+    8        | ',' . IDENTIFICADOR '[' INTCONST ']' DeclVar
+
+    IDENTIFICADOR  deslocar, e ir ao estado 20
+
+
+estado 14
+
+    9 DeclFunc: '(' . ListaParametros ')' Bloco
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 10 (ListaParametros)
+
+    ListaParametros      ir ao estado 21
+    ListaParametrosCont  ir ao estado 22
+    Tipo                 ir ao estado 23
+
+
+estado 15
+
+    2 DeclFuncVar: Tipo IDENTIFICADOR DeclVar . ';' DeclFuncVar
+
+    ';'  deslocar, e ir ao estado 24
+
+
+estado 16
+
+    4 DeclFuncVar: Tipo IDENTIFICADOR DeclFunc .
+
+    $padrão  reduzir usando a regra 4 (DeclFuncVar)
+
+
+estado 17
+
+   16 Bloco: '{' ListaDeclVar . ListaComando '}'
+   17      | '{' ListaDeclVar . '}'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    RETORNE        deslocar, e ir ao estado 28
+    LEIA           deslocar, e ir ao estado 29
+    ESCREVA        deslocar, e ir ao estado 30
+    NOVALINHA      deslocar, e ir ao estado 31
+    SE             deslocar, e ir ao estado 32
+    ENQUANTO       deslocar, e ir ao estado 33
+    ';'            deslocar, e ir ao estado 34
+    '('            deslocar, e ir ao estado 35
+    '{'            deslocar, e ir ao estado 10
+    '}'            deslocar, e ir ao estado 36
+    '!'            deslocar, e ir ao estado 37
+
+    Bloco         ir ao estado 38
+    ListaComando  ir ao estado 39
+    Comando       ir ao estado 40
+    Expr          ir ao estado 41
+    AssignExpr    ir ao estado 42
+    CondExpr      ir ao estado 43
+    OrExpr        ir ao estado 44
+    AndExpr       ir ao estado 45
+    EqExpr        ir ao estado 46
+    DesigExpr     ir ao estado 47
+    AddExpr       ir ao estado 48
+    MulExpr       ir ao estado 49
+    UnExpr        ir ao estado 50
+    LValueExpr    ir ao estado 51
+    PrimExpr      ir ao estado 52
+
+
+estado 18
+
+   19 ListaDeclVar: Tipo . IDENTIFICADOR DeclVar ';' ListaDeclVar
+   20             | Tipo . IDENTIFICADOR '[' INTCONST ']' DeclVar ';' ListaDeclVar
+
+    IDENTIFICADOR  deslocar, e ir ao estado 53
+
+
+estado 19
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' INTCONST . ']' DeclVar ';' DeclFuncVar
+
+    ']'  deslocar, e ir ao estado 54
+
+
+estado 20
+
+    7 DeclVar: ',' IDENTIFICADOR . DeclVar
+    8        | ',' IDENTIFICADOR . '[' INTCONST ']' DeclVar
+
+    '['  deslocar, e ir ao estado 55
+    ','  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar  ir ao estado 56
+
+
+estado 21
+
+    9 DeclFunc: '(' ListaParametros . ')' Bloco
+
+    ')'  deslocar, e ir ao estado 57
+
+
+estado 22
+
+   11 ListaParametros: ListaParametrosCont .
+
+    $padrão  reduzir usando a regra 11 (ListaParametros)
+
+
+estado 23
+
+   12 ListaParametrosCont: Tipo . IDENTIFICADOR
+   13                    | Tipo . IDENTIFICADOR '[' ']'
+   14                    | Tipo . IDENTIFICADOR ',' ListaParametrosCont
+   15                    | Tipo . IDENTIFICADOR '[' ']' ',' ListaParametrosCont
+
+    IDENTIFICADOR  deslocar, e ir ao estado 58
+
+
+estado 24
+
+    2 DeclFuncVar: Tipo IDENTIFICADOR DeclVar ';' . DeclFuncVar
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    DeclFuncVar  ir ao estado 59
+    Tipo         ir ao estado 5
+
+
+estado 25
+
+   69 PrimExpr: CARCONST .
+
+    $padrão  reduzir usando a regra 69 (PrimExpr)
+
+
+estado 26
+
+   63 LValueExpr: IDENTIFICADOR . '[' Expr ']'
+   64           | IDENTIFICADOR .
+   65 PrimExpr: IDENTIFICADOR . '(' ListExpr ')'
+   66         | IDENTIFICADOR . '(' ')'
+   67         | IDENTIFICADOR . '[' Expr ']'
+   68         | IDENTIFICADOR .
+
+    '['  deslocar, e ir ao estado 60
+    '('  deslocar, e ir ao estado 61
+
+    '='       reduzir usando a regra 64 (LValueExpr)
+    '='       [reduzir usando a regra 68 (PrimExpr)]
+    $padrão  reduzir usando a regra 68 (PrimExpr)
+
+
+estado 27
+
+   70 PrimExpr: INTCONST .
+
+    $padrão  reduzir usando a regra 70 (PrimExpr)
+
+
+estado 28
+
+   27 Comando: RETORNE . Expr ';'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 62
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 29
+
+   28 Comando: LEIA . LValueExpr ';'
+
+    IDENTIFICADOR  deslocar, e ir ao estado 63
+
+    LValueExpr  ir ao estado 64
+
+
+estado 30
+
+   29 Comando: ESCREVA . Expr ';'
+   30        | ESCREVA . CADEIACARACTERES ';'
+
+    CARCONST          deslocar, e ir ao estado 25
+    IDENTIFICADOR     deslocar, e ir ao estado 26
+    INTCONST          deslocar, e ir ao estado 27
+    CADEIACARACTERES  deslocar, e ir ao estado 65
+    '('               deslocar, e ir ao estado 35
+    '!'               deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 66
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 31
+
+   31 Comando: NOVALINHA . ';'
+
+    ';'  deslocar, e ir ao estado 67
+
+
+estado 32
+
+   32 Comando: SE . '(' Expr ')' ENTAO Comando
+   33        | SE . '(' Expr ')' ENTAO Comando SENAO Comando
+
+    '('  deslocar, e ir ao estado 68
+
+
+estado 33
+
+   34 Comando: ENQUANTO . '(' Expr ')' EXECUTE Comando
+
+    '('  deslocar, e ir ao estado 69
+
+
+estado 34
+
+   25 Comando: ';' .
+
+    $padrão  reduzir usando a regra 25 (Comando)
+
+
+estado 35
+
+   71 PrimExpr: '(' . Expr ')'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 70
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 36
+
+   17 Bloco: '{' ListaDeclVar '}' .
+
+    $padrão  reduzir usando a regra 17 (Bloco)
+
+
+estado 37
+
+   61 UnExpr: '!' . PrimExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+
+    PrimExpr  ir ao estado 72
+
+
+estado 38
+
+   35 Comando: Bloco .
+
+    $padrão  reduzir usando a regra 35 (Comando)
+
+
+estado 39
+
+   16 Bloco: '{' ListaDeclVar ListaComando . '}'
+
+    '}'  deslocar, e ir ao estado 73
+
+
+estado 40
+
+   23 ListaComando: Comando .
+   24             | Comando . ListaComando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    RETORNE        deslocar, e ir ao estado 28
+    LEIA           deslocar, e ir ao estado 29
+    ESCREVA        deslocar, e ir ao estado 30
+    NOVALINHA      deslocar, e ir ao estado 31
+    SE             deslocar, e ir ao estado 32
+    ENQUANTO       deslocar, e ir ao estado 33
+    ';'            deslocar, e ir ao estado 34
+    '('            deslocar, e ir ao estado 35
+    '{'            deslocar, e ir ao estado 10
+    '!'            deslocar, e ir ao estado 37
+
+    $padrão  reduzir usando a regra 23 (ListaComando)
+
+    Bloco         ir ao estado 38
+    ListaComando  ir ao estado 74
+    Comando       ir ao estado 40
+    Expr          ir ao estado 41
+    AssignExpr    ir ao estado 42
+    CondExpr      ir ao estado 43
+    OrExpr        ir ao estado 44
+    AndExpr       ir ao estado 45
+    EqExpr        ir ao estado 46
+    DesigExpr     ir ao estado 47
+    AddExpr       ir ao estado 48
+    MulExpr       ir ao estado 49
+    UnExpr        ir ao estado 50
+    LValueExpr    ir ao estado 51
+    PrimExpr      ir ao estado 52
+
+
+estado 41
+
+   26 Comando: Expr . ';'
+
+    ';'  deslocar, e ir ao estado 75
+
+
+estado 42
+
+   36 Expr: AssignExpr .
+
+    $padrão  reduzir usando a regra 36 (Expr)
+
+
+estado 43
+
+   37 AssignExpr: CondExpr .
+
+    $padrão  reduzir usando a regra 37 (AssignExpr)
+
+
+estado 44
+
+   39 CondExpr: OrExpr .
+   40         | OrExpr . '?' Expr ':' CondExpr
+   41 OrExpr: OrExpr . 'o' 'u' AndExpr
+
+    '?'  deslocar, e ir ao estado 76
+    'o'  deslocar, e ir ao estado 77
+
+    $padrão  reduzir usando a regra 39 (CondExpr)
+
+
+estado 45
+
+   42 OrExpr: AndExpr .
+   43 AndExpr: AndExpr . 'e' EqExpr
+
+    'e'  deslocar, e ir ao estado 78
+
+    $padrão  reduzir usando a regra 42 (OrExpr)
+
+
+estado 46
+
+   44 AndExpr: EqExpr .
+   45 EqExpr: EqExpr . '=' '=' DesigExpr
+   46       | EqExpr . '!' '=' DesigExpr
+
+    '='  deslocar, e ir ao estado 79
+    '!'  deslocar, e ir ao estado 80
+
+    $padrão  reduzir usando a regra 44 (AndExpr)
+
+
+estado 47
+
+   47 EqExpr: DesigExpr .
+   48 DesigExpr: DesigExpr . '<' AddExpr
+   49          | DesigExpr . '>' AddExpr
+   50          | DesigExpr . '>' '=' AddExpr
+   51          | DesigExpr . '<' '=' AddExpr
+
+    '<'  deslocar, e ir ao estado 81
+    '>'  deslocar, e ir ao estado 82
+
+    $padrão  reduzir usando a regra 47 (EqExpr)
+
+
+estado 48
+
+   52 DesigExpr: AddExpr .
+   53 AddExpr: AddExpr . '+' MulExpr
+   54        | AddExpr . '-' MulExpr
+
+    '+'  deslocar, e ir ao estado 83
+    '-'  deslocar, e ir ao estado 84
+
+    $padrão  reduzir usando a regra 52 (DesigExpr)
+
+
+estado 49
+
+   55 AddExpr: MulExpr .
+   56 MulExpr: MulExpr . '*' UnExpr
+   57        | MulExpr . '=' UnExpr
+   58        | MulExpr . '%' UnExpr
+
+    '='  deslocar, e ir ao estado 85
+    '*'  deslocar, e ir ao estado 86
+    '%'  deslocar, e ir ao estado 87
+
+    '='       [reduzir usando a regra 55 (AddExpr)]
+    $padrão  reduzir usando a regra 55 (AddExpr)
+
+
+estado 50
+
+   59 MulExpr: UnExpr .
+
+    $padrão  reduzir usando a regra 59 (MulExpr)
+
+
+estado 51
+
+   38 AssignExpr: LValueExpr . '=' AssignExpr
+
+    '='  deslocar, e ir ao estado 88
+
+
+estado 52
+
+   60 UnExpr: PrimExpr .
+   62       | PrimExpr .
+
+    ';'       reduzir usando a regra 60 (UnExpr)
+    ';'       [reduzir usando a regra 62 (UnExpr)]
+    ']'       reduzir usando a regra 60 (UnExpr)
+    ']'       [reduzir usando a regra 62 (UnExpr)]
+    ')'       reduzir usando a regra 60 (UnExpr)
+    ')'       [reduzir usando a regra 62 (UnExpr)]
+    '='       reduzir usando a regra 60 (UnExpr)
+    '='       [reduzir usando a regra 62 (UnExpr)]
+    '?'       reduzir usando a regra 60 (UnExpr)
+    '?'       [reduzir usando a regra 62 (UnExpr)]
+    ':'       reduzir usando a regra 60 (UnExpr)
+    ':'       [reduzir usando a regra 62 (UnExpr)]
+    'o'       reduzir usando a regra 60 (UnExpr)
+    'o'       [reduzir usando a regra 62 (UnExpr)]
+    'e'       reduzir usando a regra 60 (UnExpr)
+    'e'       [reduzir usando a regra 62 (UnExpr)]
+    '!'       reduzir usando a regra 60 (UnExpr)
+    '!'       [reduzir usando a regra 62 (UnExpr)]
+    '<'       reduzir usando a regra 60 (UnExpr)
+    '<'       [reduzir usando a regra 62 (UnExpr)]
+    '>'       reduzir usando a regra 60 (UnExpr)
+    '>'       [reduzir usando a regra 62 (UnExpr)]
+    '+'       reduzir usando a regra 60 (UnExpr)
+    '+'       [reduzir usando a regra 62 (UnExpr)]
+    '-'       reduzir usando a regra 60 (UnExpr)
+    '-'       [reduzir usando a regra 62 (UnExpr)]
+    '*'       reduzir usando a regra 60 (UnExpr)
+    '*'       [reduzir usando a regra 62 (UnExpr)]
+    '%'       reduzir usando a regra 60 (UnExpr)
+    '%'       [reduzir usando a regra 62 (UnExpr)]
+    $padrão  reduzir usando a regra 60 (UnExpr)
+
+
+estado 53
+
+   19 ListaDeclVar: Tipo IDENTIFICADOR . DeclVar ';' ListaDeclVar
+   20             | Tipo IDENTIFICADOR . '[' INTCONST ']' DeclVar ';' ListaDeclVar
+
+    '['  deslocar, e ir ao estado 89
+    ','  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar  ir ao estado 90
+
+
+estado 54
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' INTCONST ']' . DeclVar ';' DeclFuncVar
+
+    ','  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar  ir ao estado 91
+
+
+estado 55
+
+    8 DeclVar: ',' IDENTIFICADOR '[' . INTCONST ']' DeclVar
+
+    INTCONST  deslocar, e ir ao estado 92
+
+
+estado 56
+
+    7 DeclVar: ',' IDENTIFICADOR DeclVar .
+
+    $padrão  reduzir usando a regra 7 (DeclVar)
+
+
+estado 57
+
+    9 DeclFunc: '(' ListaParametros ')' . Bloco
+
+    '{'  deslocar, e ir ao estado 10
+
+    Bloco  ir ao estado 93
+
+
+estado 58
+
+   12 ListaParametrosCont: Tipo IDENTIFICADOR .
+   13                    | Tipo IDENTIFICADOR . '[' ']'
+   14                    | Tipo IDENTIFICADOR . ',' ListaParametrosCont
+   15                    | Tipo IDENTIFICADOR . '[' ']' ',' ListaParametrosCont
+
+    '['  deslocar, e ir ao estado 94
+    ','  deslocar, e ir ao estado 95
+
+    $padrão  reduzir usando a regra 12 (ListaParametrosCont)
+
+
+estado 59
+
+    2 DeclFuncVar: Tipo IDENTIFICADOR DeclVar ';' DeclFuncVar .
+
+    $padrão  reduzir usando a regra 2 (DeclFuncVar)
+
+
+estado 60
+
+   63 LValueExpr: IDENTIFICADOR '[' . Expr ']'
+   67 PrimExpr: IDENTIFICADOR '[' . Expr ']'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 96
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 61
+
+   65 PrimExpr: IDENTIFICADOR '(' . ListExpr ')'
+   66         | IDENTIFICADOR '(' . ')'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    ')'            deslocar, e ir ao estado 97
+    '!'            deslocar, e ir ao estado 37
+
+    AssignExpr  ir ao estado 98
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+    ListExpr    ir ao estado 99
+
+
+estado 62
+
+   27 Comando: RETORNE Expr . ';'
+
+    ';'  deslocar, e ir ao estado 100
+
+
+estado 63
+
+   63 LValueExpr: IDENTIFICADOR . '[' Expr ']'
+   64           | IDENTIFICADOR .
+
+    '['  deslocar, e ir ao estado 101
+
+    $padrão  reduzir usando a regra 64 (LValueExpr)
+
+
+estado 64
+
+   28 Comando: LEIA LValueExpr . ';'
+
+    ';'  deslocar, e ir ao estado 102
+
+
+estado 65
+
+   30 Comando: ESCREVA CADEIACARACTERES . ';'
+
+    ';'  deslocar, e ir ao estado 103
+
+
+estado 66
+
+   29 Comando: ESCREVA Expr . ';'
+
+    ';'  deslocar, e ir ao estado 104
+
+
+estado 67
+
+   31 Comando: NOVALINHA ';' .
+
+    $padrão  reduzir usando a regra 31 (Comando)
+
+
+estado 68
+
+   32 Comando: SE '(' . Expr ')' ENTAO Comando
+   33        | SE '(' . Expr ')' ENTAO Comando SENAO Comando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 105
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 69
+
+   34 Comando: ENQUANTO '(' . Expr ')' EXECUTE Comando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 106
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 70
+
+   71 PrimExpr: '(' Expr . ')'
+
+    ')'  deslocar, e ir ao estado 107
+
+
+estado 71
+
+   65 PrimExpr: IDENTIFICADOR . '(' ListExpr ')'
+   66         | IDENTIFICADOR . '(' ')'
+   67         | IDENTIFICADOR . '[' Expr ']'
+   68         | IDENTIFICADOR .
+
+    '['  deslocar, e ir ao estado 108
+    '('  deslocar, e ir ao estado 61
+
+    $padrão  reduzir usando a regra 68 (PrimExpr)
+
+
+estado 72
+
+   61 UnExpr: '!' PrimExpr .
+
+    $padrão  reduzir usando a regra 61 (UnExpr)
+
+
+estado 73
+
+   16 Bloco: '{' ListaDeclVar ListaComando '}' .
+
+    $padrão  reduzir usando a regra 16 (Bloco)
+
+
+estado 74
+
+   24 ListaComando: Comando ListaComando .
+
+    $padrão  reduzir usando a regra 24 (ListaComando)
+
+
+estado 75
+
+   26 Comando: Expr ';' .
+
+    $padrão  reduzir usando a regra 26 (Comando)
+
+
+estado 76
+
+   40 CondExpr: OrExpr '?' . Expr ':' CondExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 109
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 77
+
+   41 OrExpr: OrExpr 'o' . 'u' AndExpr
+
+    'u'  deslocar, e ir ao estado 110
+
+
+estado 78
+
+   43 AndExpr: AndExpr 'e' . EqExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    EqExpr     ir ao estado 111
+    DesigExpr  ir ao estado 47
+    AddExpr    ir ao estado 48
+    MulExpr    ir ao estado 49
+    UnExpr     ir ao estado 50
+    PrimExpr   ir ao estado 52
+
+
+estado 79
+
+   45 EqExpr: EqExpr '=' . '=' DesigExpr
+
+    '='  deslocar, e ir ao estado 112
+
+
+estado 80
+
+   46 EqExpr: EqExpr '!' . '=' DesigExpr
+
+    '='  deslocar, e ir ao estado 113
+
+
+estado 81
+
+   48 DesigExpr: DesigExpr '<' . AddExpr
+   51          | DesigExpr '<' . '=' AddExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '='            deslocar, e ir ao estado 114
+    '!'            deslocar, e ir ao estado 37
+
+    AddExpr   ir ao estado 115
+    MulExpr   ir ao estado 49
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 82
+
+   49 DesigExpr: DesigExpr '>' . AddExpr
+   50          | DesigExpr '>' . '=' AddExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '='            deslocar, e ir ao estado 116
+    '!'            deslocar, e ir ao estado 37
+
+    AddExpr   ir ao estado 117
+    MulExpr   ir ao estado 49
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 83
+
+   53 AddExpr: AddExpr '+' . MulExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    MulExpr   ir ao estado 118
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 84
+
+   54 AddExpr: AddExpr '-' . MulExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    MulExpr   ir ao estado 119
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 85
+
+   57 MulExpr: MulExpr '=' . UnExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    UnExpr    ir ao estado 120
+    PrimExpr  ir ao estado 52
+
+
+estado 86
+
+   56 MulExpr: MulExpr '*' . UnExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    UnExpr    ir ao estado 121
+    PrimExpr  ir ao estado 52
+
+
+estado 87
+
+   58 MulExpr: MulExpr '%' . UnExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    UnExpr    ir ao estado 122
+    PrimExpr  ir ao estado 52
+
+
+estado 88
+
+   38 AssignExpr: LValueExpr '=' . AssignExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    AssignExpr  ir ao estado 123
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 89
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' . INTCONST ']' DeclVar ';' ListaDeclVar
+
+    INTCONST  deslocar, e ir ao estado 124
+
+
+estado 90
+
+   19 ListaDeclVar: Tipo IDENTIFICADOR DeclVar . ';' ListaDeclVar
+
+    ';'  deslocar, e ir ao estado 125
+
+
+estado 91
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar . ';' DeclFuncVar
+
+    ';'  deslocar, e ir ao estado 126
+
+
+estado 92
+
+    8 DeclVar: ',' IDENTIFICADOR '[' INTCONST . ']' DeclVar
+
+    ']'  deslocar, e ir ao estado 127
+
+
+estado 93
+
+    9 DeclFunc: '(' ListaParametros ')' Bloco .
+
+    $padrão  reduzir usando a regra 9 (DeclFunc)
+
+
+estado 94
+
+   13 ListaParametrosCont: Tipo IDENTIFICADOR '[' . ']'
+   15                    | Tipo IDENTIFICADOR '[' . ']' ',' ListaParametrosCont
+
+    ']'  deslocar, e ir ao estado 128
+
+
+estado 95
+
+   14 ListaParametrosCont: Tipo IDENTIFICADOR ',' . ListaParametrosCont
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    ListaParametrosCont  ir ao estado 129
+    Tipo                 ir ao estado 23
+
+
+estado 96
+
+   63 LValueExpr: IDENTIFICADOR '[' Expr . ']'
+   67 PrimExpr: IDENTIFICADOR '[' Expr . ']'
+
+    ']'  deslocar, e ir ao estado 130
+
+
+estado 97
+
+   66 PrimExpr: IDENTIFICADOR '(' ')' .
+
+    $padrão  reduzir usando a regra 66 (PrimExpr)
+
+
+estado 98
+
+   72 ListExpr: AssignExpr .
+
+    $padrão  reduzir usando a regra 72 (ListExpr)
+
+
+estado 99
+
+   65 PrimExpr: IDENTIFICADOR '(' ListExpr . ')'
+   73 ListExpr: ListExpr . ';' AssignExpr
+
+    ';'  deslocar, e ir ao estado 131
+    ')'  deslocar, e ir ao estado 132
+
+
+estado 100
+
+   27 Comando: RETORNE Expr ';' .
+
+    $padrão  reduzir usando a regra 27 (Comando)
+
+
+estado 101
+
+   63 LValueExpr: IDENTIFICADOR '[' . Expr ']'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 133
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 102
+
+   28 Comando: LEIA LValueExpr ';' .
+
+    $padrão  reduzir usando a regra 28 (Comando)
+
+
+estado 103
+
+   30 Comando: ESCREVA CADEIACARACTERES ';' .
+
+    $padrão  reduzir usando a regra 30 (Comando)
+
+
+estado 104
+
+   29 Comando: ESCREVA Expr ';' .
+
+    $padrão  reduzir usando a regra 29 (Comando)
+
+
+estado 105
+
+   32 Comando: SE '(' Expr . ')' ENTAO Comando
+   33        | SE '(' Expr . ')' ENTAO Comando SENAO Comando
+
+    ')'  deslocar, e ir ao estado 134
+
+
+estado 106
+
+   34 Comando: ENQUANTO '(' Expr . ')' EXECUTE Comando
+
+    ')'  deslocar, e ir ao estado 135
+
+
+estado 107
+
+   71 PrimExpr: '(' Expr ')' .
+
+    $padrão  reduzir usando a regra 71 (PrimExpr)
+
+
+estado 108
+
+   67 PrimExpr: IDENTIFICADOR '[' . Expr ']'
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    Expr        ir ao estado 136
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 109
+
+   40 CondExpr: OrExpr '?' Expr . ':' CondExpr
+
+    ':'  deslocar, e ir ao estado 137
+
+
+estado 110
+
+   41 OrExpr: OrExpr 'o' 'u' . AndExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    AndExpr    ir ao estado 138
+    EqExpr     ir ao estado 46
+    DesigExpr  ir ao estado 47
+    AddExpr    ir ao estado 48
+    MulExpr    ir ao estado 49
+    UnExpr     ir ao estado 50
+    PrimExpr   ir ao estado 52
+
+
+estado 111
+
+   43 AndExpr: AndExpr 'e' EqExpr .
+   45 EqExpr: EqExpr . '=' '=' DesigExpr
+   46       | EqExpr . '!' '=' DesigExpr
+
+    '='  deslocar, e ir ao estado 79
+    '!'  deslocar, e ir ao estado 80
+
+    $padrão  reduzir usando a regra 43 (AndExpr)
+
+
+estado 112
+
+   45 EqExpr: EqExpr '=' '=' . DesigExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    DesigExpr  ir ao estado 139
+    AddExpr    ir ao estado 48
+    MulExpr    ir ao estado 49
+    UnExpr     ir ao estado 50
+    PrimExpr   ir ao estado 52
+
+
+estado 113
+
+   46 EqExpr: EqExpr '!' '=' . DesigExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    DesigExpr  ir ao estado 140
+    AddExpr    ir ao estado 48
+    MulExpr    ir ao estado 49
+    UnExpr     ir ao estado 50
+    PrimExpr   ir ao estado 52
+
+
+estado 114
+
+   51 DesigExpr: DesigExpr '<' '=' . AddExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    AddExpr   ir ao estado 141
+    MulExpr   ir ao estado 49
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 115
+
+   48 DesigExpr: DesigExpr '<' AddExpr .
+   53 AddExpr: AddExpr . '+' MulExpr
+   54        | AddExpr . '-' MulExpr
+
+    '+'  deslocar, e ir ao estado 83
+    '-'  deslocar, e ir ao estado 84
+
+    $padrão  reduzir usando a regra 48 (DesigExpr)
+
+
+estado 116
+
+   50 DesigExpr: DesigExpr '>' '=' . AddExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    AddExpr   ir ao estado 142
+    MulExpr   ir ao estado 49
+    UnExpr    ir ao estado 50
+    PrimExpr  ir ao estado 52
+
+
+estado 117
+
+   49 DesigExpr: DesigExpr '>' AddExpr .
+   53 AddExpr: AddExpr . '+' MulExpr
+   54        | AddExpr . '-' MulExpr
+
+    '+'  deslocar, e ir ao estado 83
+    '-'  deslocar, e ir ao estado 84
+
+    $padrão  reduzir usando a regra 49 (DesigExpr)
+
+
+estado 118
+
+   53 AddExpr: AddExpr '+' MulExpr .
+   56 MulExpr: MulExpr . '*' UnExpr
+   57        | MulExpr . '=' UnExpr
+   58        | MulExpr . '%' UnExpr
+
+    '='  deslocar, e ir ao estado 85
+    '*'  deslocar, e ir ao estado 86
+    '%'  deslocar, e ir ao estado 87
+
+    '='       [reduzir usando a regra 53 (AddExpr)]
+    $padrão  reduzir usando a regra 53 (AddExpr)
+
+
+estado 119
+
+   54 AddExpr: AddExpr '-' MulExpr .
+   56 MulExpr: MulExpr . '*' UnExpr
+   57        | MulExpr . '=' UnExpr
+   58        | MulExpr . '%' UnExpr
+
+    '='  deslocar, e ir ao estado 85
+    '*'  deslocar, e ir ao estado 86
+    '%'  deslocar, e ir ao estado 87
+
+    '='       [reduzir usando a regra 54 (AddExpr)]
+    $padrão  reduzir usando a regra 54 (AddExpr)
+
+
+estado 120
+
+   57 MulExpr: MulExpr '=' UnExpr .
+
+    $padrão  reduzir usando a regra 57 (MulExpr)
+
+
+estado 121
+
+   56 MulExpr: MulExpr '*' UnExpr .
+
+    $padrão  reduzir usando a regra 56 (MulExpr)
+
+
+estado 122
+
+   58 MulExpr: MulExpr '%' UnExpr .
+
+    $padrão  reduzir usando a regra 58 (MulExpr)
+
+
+estado 123
+
+   38 AssignExpr: LValueExpr '=' AssignExpr .
+
+    $padrão  reduzir usando a regra 38 (AssignExpr)
+
+
+estado 124
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' INTCONST . ']' DeclVar ';' ListaDeclVar
+
+    ']'  deslocar, e ir ao estado 143
+
+
+estado 125
+
+   19 ListaDeclVar: Tipo IDENTIFICADOR DeclVar ';' . ListaDeclVar
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 18 (ListaDeclVar)
+
+    ListaDeclVar  ir ao estado 144
+    Tipo          ir ao estado 18
+
+
+estado 126
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' . DeclFuncVar
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    DeclFuncVar  ir ao estado 145
+    Tipo         ir ao estado 5
+
+
+estado 127
+
+    8 DeclVar: ',' IDENTIFICADOR '[' INTCONST ']' . DeclVar
+
+    ','  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar  ir ao estado 146
+
+
+estado 128
+
+   13 ListaParametrosCont: Tipo IDENTIFICADOR '[' ']' .
+   15                    | Tipo IDENTIFICADOR '[' ']' . ',' ListaParametrosCont
+
+    ','  deslocar, e ir ao estado 147
+
+    $padrão  reduzir usando a regra 13 (ListaParametrosCont)
+
+
+estado 129
+
+   14 ListaParametrosCont: Tipo IDENTIFICADOR ',' ListaParametrosCont .
+
+    $padrão  reduzir usando a regra 14 (ListaParametrosCont)
+
+
+estado 130
+
+   63 LValueExpr: IDENTIFICADOR '[' Expr ']' .
+   67 PrimExpr: IDENTIFICADOR '[' Expr ']' .
+
+    '='       reduzir usando a regra 63 (LValueExpr)
+    '='       [reduzir usando a regra 67 (PrimExpr)]
+    $padrão  reduzir usando a regra 67 (PrimExpr)
+
+
+estado 131
+
+   73 ListExpr: ListExpr ';' . AssignExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    AssignExpr  ir ao estado 148
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 132
+
+   65 PrimExpr: IDENTIFICADOR '(' ListExpr ')' .
+
+    $padrão  reduzir usando a regra 65 (PrimExpr)
+
+
+estado 133
+
+   63 LValueExpr: IDENTIFICADOR '[' Expr . ']'
+
+    ']'  deslocar, e ir ao estado 149
+
+
+estado 134
+
+   32 Comando: SE '(' Expr ')' . ENTAO Comando
+   33        | SE '(' Expr ')' . ENTAO Comando SENAO Comando
+
+    ENTAO  deslocar, e ir ao estado 150
+
+
+estado 135
+
+   34 Comando: ENQUANTO '(' Expr ')' . EXECUTE Comando
+
+    EXECUTE  deslocar, e ir ao estado 151
+
+
+estado 136
+
+   67 PrimExpr: IDENTIFICADOR '[' Expr . ']'
+
+    ']'  deslocar, e ir ao estado 152
+
+
+estado 137
+
+   40 CondExpr: OrExpr '?' Expr ':' . CondExpr
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 71
+    INTCONST       deslocar, e ir ao estado 27
+    '('            deslocar, e ir ao estado 35
+    '!'            deslocar, e ir ao estado 37
+
+    CondExpr   ir ao estado 153
+    OrExpr     ir ao estado 44
+    AndExpr    ir ao estado 45
+    EqExpr     ir ao estado 46
+    DesigExpr  ir ao estado 47
+    AddExpr    ir ao estado 48
+    MulExpr    ir ao estado 49
+    UnExpr     ir ao estado 50
+    PrimExpr   ir ao estado 52
+
+
+estado 138
+
+   41 OrExpr: OrExpr 'o' 'u' AndExpr .
+   43 AndExpr: AndExpr . 'e' EqExpr
+
+    'e'  deslocar, e ir ao estado 78
+
+    $padrão  reduzir usando a regra 41 (OrExpr)
+
+
+estado 139
+
+   45 EqExpr: EqExpr '=' '=' DesigExpr .
+   48 DesigExpr: DesigExpr . '<' AddExpr
+   49          | DesigExpr . '>' AddExpr
+   50          | DesigExpr . '>' '=' AddExpr
+   51          | DesigExpr . '<' '=' AddExpr
+
+    '<'  deslocar, e ir ao estado 81
+    '>'  deslocar, e ir ao estado 82
+
+    $padrão  reduzir usando a regra 45 (EqExpr)
+
+
+estado 140
+
+   46 EqExpr: EqExpr '!' '=' DesigExpr .
+   48 DesigExpr: DesigExpr . '<' AddExpr
+   49          | DesigExpr . '>' AddExpr
+   50          | DesigExpr . '>' '=' AddExpr
+   51          | DesigExpr . '<' '=' AddExpr
+
+    '<'  deslocar, e ir ao estado 81
+    '>'  deslocar, e ir ao estado 82
+
+    $padrão  reduzir usando a regra 46 (EqExpr)
+
+
+estado 141
+
+   51 DesigExpr: DesigExpr '<' '=' AddExpr .
+   53 AddExpr: AddExpr . '+' MulExpr
+   54        | AddExpr . '-' MulExpr
+
+    '+'  deslocar, e ir ao estado 83
+    '-'  deslocar, e ir ao estado 84
+
+    $padrão  reduzir usando a regra 51 (DesigExpr)
+
+
+estado 142
+
+   50 DesigExpr: DesigExpr '>' '=' AddExpr .
+   53 AddExpr: AddExpr . '+' MulExpr
+   54        | AddExpr . '-' MulExpr
+
+    '+'  deslocar, e ir ao estado 83
+    '-'  deslocar, e ir ao estado 84
+
+    $padrão  reduzir usando a regra 50 (DesigExpr)
+
+
+estado 143
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' INTCONST ']' . DeclVar ';' ListaDeclVar
+
+    ','  deslocar, e ir ao estado 13
+
+    $padrão  reduzir usando a regra 6 (DeclVar)
+
+    DeclVar  ir ao estado 154
+
+
+estado 144
+
+   19 ListaDeclVar: Tipo IDENTIFICADOR DeclVar ';' ListaDeclVar .
+
+    $padrão  reduzir usando a regra 19 (ListaDeclVar)
+
+
+estado 145
+
+    3 DeclFuncVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' DeclFuncVar .
+
+    $padrão  reduzir usando a regra 3 (DeclFuncVar)
+
+
+estado 146
+
+    8 DeclVar: ',' IDENTIFICADOR '[' INTCONST ']' DeclVar .
+
+    $padrão  reduzir usando a regra 8 (DeclVar)
+
+
+estado 147
+
+   15 ListaParametrosCont: Tipo IDENTIFICADOR '[' ']' ',' . ListaParametrosCont
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    ListaParametrosCont  ir ao estado 155
+    Tipo                 ir ao estado 23
+
+
+estado 148
+
+   73 ListExpr: ListExpr ';' AssignExpr .
+
+    $padrão  reduzir usando a regra 73 (ListExpr)
+
+
+estado 149
+
+   63 LValueExpr: IDENTIFICADOR '[' Expr ']' .
+
+    $padrão  reduzir usando a regra 63 (LValueExpr)
+
+
+estado 150
+
+   32 Comando: SE '(' Expr ')' ENTAO . Comando
+   33        | SE '(' Expr ')' ENTAO . Comando SENAO Comando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    RETORNE        deslocar, e ir ao estado 28
+    LEIA           deslocar, e ir ao estado 29
+    ESCREVA        deslocar, e ir ao estado 30
+    NOVALINHA      deslocar, e ir ao estado 31
+    SE             deslocar, e ir ao estado 32
+    ENQUANTO       deslocar, e ir ao estado 33
+    ';'            deslocar, e ir ao estado 34
+    '('            deslocar, e ir ao estado 35
+    '{'            deslocar, e ir ao estado 10
+    '!'            deslocar, e ir ao estado 37
+
+    Bloco       ir ao estado 38
+    Comando     ir ao estado 156
+    Expr        ir ao estado 41
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 151
+
+   34 Comando: ENQUANTO '(' Expr ')' EXECUTE . Comando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    RETORNE        deslocar, e ir ao estado 28
+    LEIA           deslocar, e ir ao estado 29
+    ESCREVA        deslocar, e ir ao estado 30
+    NOVALINHA      deslocar, e ir ao estado 31
+    SE             deslocar, e ir ao estado 32
+    ENQUANTO       deslocar, e ir ao estado 33
+    ';'            deslocar, e ir ao estado 34
+    '('            deslocar, e ir ao estado 35
+    '{'            deslocar, e ir ao estado 10
+    '!'            deslocar, e ir ao estado 37
+
+    Bloco       ir ao estado 38
+    Comando     ir ao estado 157
+    Expr        ir ao estado 41
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 152
+
+   67 PrimExpr: IDENTIFICADOR '[' Expr ']' .
+
+    $padrão  reduzir usando a regra 67 (PrimExpr)
+
+
+estado 153
+
+   40 CondExpr: OrExpr '?' Expr ':' CondExpr .
+
+    $padrão  reduzir usando a regra 40 (CondExpr)
+
+
+estado 154
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar . ';' ListaDeclVar
+
+    ';'  deslocar, e ir ao estado 158
+
+
+estado 155
+
+   15 ListaParametrosCont: Tipo IDENTIFICADOR '[' ']' ',' ListaParametrosCont .
+
+    $padrão  reduzir usando a regra 15 (ListaParametrosCont)
+
+
+estado 156
+
+   32 Comando: SE '(' Expr ')' ENTAO Comando .
+   33        | SE '(' Expr ')' ENTAO Comando . SENAO Comando
+
+    SENAO  deslocar, e ir ao estado 159
+
+    SENAO     [reduzir usando a regra 32 (Comando)]
+    $padrão  reduzir usando a regra 32 (Comando)
+
+
+estado 157
+
+   34 Comando: ENQUANTO '(' Expr ')' EXECUTE Comando .
+
+    $padrão  reduzir usando a regra 34 (Comando)
+
+
+estado 158
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' . ListaDeclVar
+
+    CAR  deslocar, e ir ao estado 1
+    INT  deslocar, e ir ao estado 2
+
+    $padrão  reduzir usando a regra 18 (ListaDeclVar)
+
+    ListaDeclVar  ir ao estado 160
+    Tipo          ir ao estado 18
+
+
+estado 159
+
+   33 Comando: SE '(' Expr ')' ENTAO Comando SENAO . Comando
+
+    CARCONST       deslocar, e ir ao estado 25
+    IDENTIFICADOR  deslocar, e ir ao estado 26
+    INTCONST       deslocar, e ir ao estado 27
+    RETORNE        deslocar, e ir ao estado 28
+    LEIA           deslocar, e ir ao estado 29
+    ESCREVA        deslocar, e ir ao estado 30
+    NOVALINHA      deslocar, e ir ao estado 31
+    SE             deslocar, e ir ao estado 32
+    ENQUANTO       deslocar, e ir ao estado 33
+    ';'            deslocar, e ir ao estado 34
+    '('            deslocar, e ir ao estado 35
+    '{'            deslocar, e ir ao estado 10
+    '!'            deslocar, e ir ao estado 37
+
+    Bloco       ir ao estado 38
+    Comando     ir ao estado 161
+    Expr        ir ao estado 41
+    AssignExpr  ir ao estado 42
+    CondExpr    ir ao estado 43
+    OrExpr      ir ao estado 44
+    AndExpr     ir ao estado 45
+    EqExpr      ir ao estado 46
+    DesigExpr   ir ao estado 47
+    AddExpr     ir ao estado 48
+    MulExpr     ir ao estado 49
+    UnExpr      ir ao estado 50
+    LValueExpr  ir ao estado 51
+    PrimExpr    ir ao estado 52
+
+
+estado 160
+
+   20 ListaDeclVar: Tipo IDENTIFICADOR '[' INTCONST ']' DeclVar ';' ListaDeclVar .
+
+    $padrão  reduzir usando a regra 20 (ListaDeclVar)
+
+
+estado 161
+
+   33 Comando: SE '(' Expr ')' ENTAO Comando SENAO Comando .
+
+    $padrão  reduzir usando a regra 33 (Comando)
