@@ -24,7 +24,13 @@
 %token SENAO
 %token ENQUANTO
 %token EXECUTE
-%token ATRIBUICAI
+%token ATRIBUICAO
+%token IGUAL
+%token DIFERENTE
+%token MAIOR
+%token MAIORIGUAL
+%token MENOR
+%token MENORIGUAL
 
 %error-verbose
 %%

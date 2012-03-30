@@ -18,7 +18,7 @@ cezinho.tab.c: cezinho.y
 	bison -d -t -v cezinho.y
 
 clean:	
-	rm -f cezinho.tab.c cezinho.lexico.c *.o cezinho
+	rm -f cezinho.tab.[ch] cezinho.lexico.c *.o cezinho cezinho.output
 
 cleanObj:
 	rm -f *.o
