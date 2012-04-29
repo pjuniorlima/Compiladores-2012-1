@@ -1,6 +1,12 @@
 Terminais não utilizados na gramática
 
-   ATRIBUICAI
+   ATRIBUICAO
+   IGUAL
+   DIFERENTE
+   MAIOR
+   MAIORIGUAL
+   MENOR
+   MENORIGUAL
 
 
 Regras inúteis no analisador devido a conflitos
@@ -165,63 +171,69 @@ ENTAO (270) 32 33
 SENAO (271) 33
 ENQUANTO (272) 34
 EXECUTE (273) 34
-ATRIBUICAI (274)
+ATRIBUICAO (274)
+IGUAL (275)
+DIFERENTE (276)
+MAIOR (277)
+MAIORIGUAL (278)
+MENOR (279)
+MENORIGUAL (280)
 
 
 Não-terminais com as regras onde eles aparecem
 
-$accept (40)
+$accept (46)
     à esquerda: 0
-Programa (41)
+Programa (47)
     à esquerda: 1, à direita: 0
-DeclFuncVar (42)
+DeclFuncVar (48)
     à esquerda: 2 3 4, à direita: 1 2 3
-DeclProg (43)
+DeclProg (49)
     à esquerda: 5, à direita: 1
-DeclVar (44)
+DeclVar (50)
     à esquerda: 6 7 8, à direita: 2 3 7 8 19 20
-DeclFunc (45)
+DeclFunc (51)
     à esquerda: 9, à direita: 4
-ListaParametros (46)
+ListaParametros (52)
     à esquerda: 10 11, à direita: 9
-ListaParametrosCont (47)
+ListaParametrosCont (53)
     à esquerda: 12 13 14 15, à direita: 11 14 15
-Bloco (48)
+Bloco (54)
     à esquerda: 16 17, à direita: 5 9 35
-ListaDeclVar (49)
+ListaDeclVar (55)
     à esquerda: 18 19 20, à direita: 16 17 19 20
-Tipo (50)
+Tipo (56)
     à esquerda: 21 22, à direita: 2 3 4 12 13 14 15 19 20
-ListaComando (51)
+ListaComando (57)
     à esquerda: 23 24, à direita: 16 24
-Comando (52)
+Comando (58)
     à esquerda: 25 26 27 28 29 30 31 32 33 34 35, à direita: 23 24
     32 33 34
-Expr (53)
+Expr (59)
     à esquerda: 36, à direita: 26 27 29 32 33 34 40 63 67 71
-AssignExpr (54)
+AssignExpr (60)
     à esquerda: 37 38, à direita: 36 38 72 73
-CondExpr (55)
+CondExpr (61)
     à esquerda: 39 40, à direita: 37 40
-OrExpr (56)
+OrExpr (62)
     à esquerda: 41 42, à direita: 39 40 41
-AndExpr (57)
+AndExpr (63)
     à esquerda: 43 44, à direita: 41 42 43
-EqExpr (58)
+EqExpr (64)
     à esquerda: 45 46 47, à direita: 43 44 45 46
-DesigExpr (59)
+DesigExpr (65)
     à esquerda: 48 49 50 51 52, à direita: 45 46 47 48 49 50 51
-AddExpr (60)
+AddExpr (66)
     à esquerda: 53 54 55, à direita: 48 49 50 51 52 53 54
-MulExpr (61)
+MulExpr (67)
     à esquerda: 56 57 58 59, à direita: 53 54 55 56 57 58
-UnExpr (62)
+UnExpr (68)
     à esquerda: 60 61 62, à direita: 56 57 58 59
-LValueExpr (63)
+LValueExpr (69)
     à esquerda: 63 64, à direita: 28 38
-PrimExpr (64)
+PrimExpr (70)
     à esquerda: 65 66 67 68 69 70 71, à direita: 60 61 62
-ListExpr (65)
+ListExpr (71)
     à esquerda: 72 73, à direita: 65 73
 
 

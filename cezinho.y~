@@ -190,7 +190,7 @@ int main(int argc, char** argv){
 	if(yyin)
 		return yyparse();
 	else
-		yyerror("Arquivo não encontrado.\n");
+		yyerror("arquivo não encontrado.\n");
 	return 1;
 }
 		
