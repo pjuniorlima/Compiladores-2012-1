@@ -1,7 +1,14 @@
 Trabalho da Disciplina de Compiladores realizada no primeiro período de 2012.
+Dupla: Hugo Tannus e Paulo Junior Lima
 
-Execute:
+Para gerar o analisador execute:
 
 $ make all
 
-para gerar o analisador léxico.
+Para checar se um arquivo está lexicamente e sintaticamente correto digite
+
+$ ./cezinho arquivo-exemplo.czin
+
+por exemplo:
+
+$ ./cezinho expressao1.czin
