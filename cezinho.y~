@@ -56,24 +56,25 @@
 
 Programa:	DeclFuncVar DeclProg
 ;
+
 DeclFuncVar:	Tipo IDENTIFICADOR DeclVar PONTOVIRGULA DeclFuncVar
 		| Tipo IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar PONTOVIRGULA DeclFuncVar
 		| Tipo IDENTIFICADOR DeclFunc DeclFuncVar
-		| 
+		| /*Vazio*/
 ;
 
 DeclProg:	PROGRAMA Bloco
 ;
 
-DeclVar:	
-		| VIRGULA IDENTIFICADOR DeclVar
+DeclVar:	| VIRGULA IDENTIFICADOR DeclVar
 		| VIRGULA IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar
+		|/*Vazio*/
 ;
 
 DeclFunc:	ABREPAR ListaParametros FECHAPAR Bloco
 ;
 
-ListaParametros:	
+ListaParametros:	/*Vazio*/
 		| ListaParametrosCont
 ;
 
@@ -117,7 +118,7 @@ Expr:		AssignExpr
 ;
 
 AssignExpr:	CondExpr
-		| LValueExpr IGUAL AssignExpr
+		| LValueExpr ATRIBUICAO AssignExpr
 ;
 
 CondExpr:	OrExpr
@@ -174,12 +175,12 @@ PrimExpr:	IDENTIFICADOR ABREPAR ListExpr FECHAPAR
 ;
 
 ListExpr:	AssignExpr
-		| ListExpr PONTOVIRGULA AssignExpr
+		| ListExpr VIRGULA AssignExpr
 ;
 
 %%
 void yyerror(char const* msg){
-	printf("%s -- Linha %d\n", msg, yylineno);
+	printf("%s na Linha --> %d\n", msg, yylineno);
 }
 int main(int argc, char** argv){
 	if(argc != 2){
@@ -190,7 +191,7 @@ int main(int argc, char** argv){
 	if(yyin)
 		return yyparse();
 	else
-		yyerror("arquivo não encontrado.\n");
+		yyerror("Arquivo não encontrado.\n");
 	return 1;
 }
 		

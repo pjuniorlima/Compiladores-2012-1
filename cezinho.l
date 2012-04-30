@@ -6,11 +6,10 @@
 %}
 
 CHAR		['][!-~][']
-DIGIT		[+-][0-9]
-LETTER		[A-Za-z]
-ID		{LETTER\_}({LETTER}_{DIGIT})*
-WHITESPACE	[\t\n\r' ']
-NUMBER		{digit}+(\.{digit}+)?(E[+-]?{digit}+)?
+DIGIT		[0-9]
+ID		[a-zA-Z\_][a-zA-Z\_0-9]*
+WHITESPACE	[\t\n\r ]
+CADEIACARACTERES 	[\"]([^\"\\\n]|([\\](.|[\n])))*[\"]
 
 %%
 
@@ -20,6 +19,10 @@ programa {
 
 int	{
 		return(INT);
+	}
+
+car	{
+		return(CAR);
 	}
 
 retorne	{
@@ -44,6 +47,10 @@ se	{
 
 entao	{
 		return(ENTAO);
+	}
+
+senao	{
+		return(SENAO);
 	}
 
 enquanto	{
@@ -161,18 +168,15 @@ e	{
 "/*" {
 	register int c;
 	
-	while(1)
-	{
+	while(1){
 		while ((c = input()) != '*' && c != EOF);
-		if ( c == '*' )
-		{
+		if ( c == '*' ){
 			while ((c = input()) == '*');
 			if ( c == '/' )
 				break;
 		}
-		if ( c == EOF )
-		{
-			printf("ERRO: COMENTARIO NAO TERMINA\n");
+		if ( c == EOF ){
+			printf("Comentário não termina.\n");
 			return 1;
 		}
 	}
@@ -208,12 +212,16 @@ e	{
 	}
 
 {CHAR}	{
-		return (CARCONST);
+		return (CAR);
 	}
 
 {ID}+	{
 		return (IDENTIFICADOR);
 	}
+
+{CADEIACARACTERES}	{
+		return(CADEIACARACTERES);
+}
 
 {WHITESPACE}
 
@@ -225,9 +233,6 @@ e	{
 %%
 
 int yywrap();
-/*main(){
-	yylex();
-}*/
 
 int yywrap(){
 	return 1;

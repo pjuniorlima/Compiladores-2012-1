@@ -2,6 +2,13 @@ CC= gcc
 CFLAGS= -g -Wall -ansi
 LFLAGS= -lm
 
+all:
+	make cezinho.tab.c
+	make cezinho.lexico.c
+	make lexico.o
+	make main.o
+	make cezinho
+
 cezinho: main.o lexico.o
 	$(CC) $(CFLAGS) $(LFLAGS) lexico.o main.o -o cezinho
 

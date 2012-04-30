@@ -59,7 +59,25 @@
      MAIOR = 277,
      MAIORIGUAL = 278,
      MENOR = 279,
-     MENORIGUAL = 280
+     MENORIGUAL = 280,
+     NEGACAO = 281,
+     OULOGICO = 282,
+     ELOGICO = 283,
+     ABREPAR = 284,
+     FECHAPAR = 285,
+     ABRECHAVE = 286,
+     FECHACHAVE = 287,
+     ABRECOLCH = 288,
+     FECHACOLCH = 289,
+     VIRGULA = 290,
+     PONTOVIRGULA = 291,
+     ADICAO = 292,
+     SUBTRACAO = 293,
+     DIVISAO = 294,
+     MULTIPLICACAO = 295,
+     MOD = 296,
+     INTERROGACAO = 297,
+     DOISPONTOS = 298
    };
 #endif
 
