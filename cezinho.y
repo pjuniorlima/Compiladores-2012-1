@@ -156,7 +156,7 @@ MulExpr:	MulExpr MULTIPLICACAO UnExpr
 		| UnExpr
 ;
 
-UnExpr:		PrimExpr
+UnExpr:		SUBTRACAO PrimExpr
 		| NEGACAO PrimExpr
 		| PrimExpr
 ;

@@ -6,7 +6,7 @@
 %}
 
 CHAR		['][!-~][']
-DIGIT		[-][0-9]
+DIGIT		[0-9]
 ID		[a-zA-Z\_][a-zA-Z\_0-9]*
 WHITESPACE	[\t\n\r ]
 CADEIACARACTERES 	[\"]([^\"\\\n]|([\\](.|[\n])))*[\"]
@@ -212,7 +212,7 @@ e	{
 	}
 
 {CHAR}	{
-		return (CAR);
+		return (CARCONST);
 	}
 
 {ID}+	{
@@ -223,12 +223,6 @@ e	{
 		return(CADEIACARACTERES);
 }
 
-{WHITESPACE}
-
-.	{
-		printf("Caractere inválido %s.\n", yytext);
-		return (-1);
-	}
 
 %%
 

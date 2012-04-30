@@ -2,6 +2,6 @@ Trabalho da Disciplina de Compiladores realizada no primeiro período de 2012.
 
 Execute:
 
-$ make cezinho
+$ make all
 
 para gerar o analisador léxico.

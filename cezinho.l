@@ -212,7 +212,7 @@ e	{
 	}
 
 {CHAR}	{
-		return (CAR);
+		return (CARCONST);
 	}
 
 {ID}+	{
