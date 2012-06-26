@@ -1,19 +1,156 @@
 %{
-	#include<stdio.h>
-	#include<stdlib.h>
-	FILE *yyin;
-	extern int yylineno;
-	extern int yylex();
-	void yyerror(char const *msg);
-	char* constString=NULL;
+	#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <glib.h>//Hash Tables — associations between keys and values so that given a key the value can be found quickly - tirado de http://goo.gl/yyBZa
+
+#include "common.h"
+#include "node.h"
+#include "env.h"
+
+extern scanner lex_value;
+extern int yylineno;
+
+// Mapeia os ids das funções com os parâmetros
+char cur_func[100];
+GHashTable *func_params;
+
+int has_pushed = 0;
+Node *root;
+Env *top, *saved;
+
+Env* new_env(Env *p){
+	Env *env = malloc(sizeof(Env));
+	env->table = g_hash_table_new(g_str_hash, g_str_equal);
+	env->prev = p;
+	
+	return env;
+}
+
+char* env_get(Env *env, char *k) {
+	// debug da tabela de simbolos
+	// table_dump(env);
+	for(; env != null; env = env->prev){
+		char *type = g_hash_table_lookup(env->table, k);
+		
+		if(type != null){
+			return type;
+		}
+	}
+	return null;
+}
+
+// Insere na tabela de simbolos o 'id' e o 'tipo'
+void env_put(Env *env, char *k, Node *v) {
+	char *type = g_hash_table_lookup(env->table, k);
+	if ( type != null ) {
+		char msg[100];
+		sprintf(msg, "Variável %s já declarada no escopo", k);
+		yyerror(msg);
+	}
+	else {
+		g_hash_table_insert(env->table, k, v);
+	}
+}
+
+void array_id(char *result, char *str){
+	char *full = str;
+	
+	int i, begin = 0, end;
+	for(i=0; i<strlen(full); i++){
+		if(full[i] == '['){
+			end = i;
+			break;
+		}
+	}
+	
+	strncpy(result, &full[begin], end);
+}
+
+char* array_pos(char *result, char *str){
+	char *full = str;
+	
+	int i, begin, end;
+	for(i=0; i<strlen(full); i++){
+		if(full[i] == '['){
+			begin = end = i+1;
+		}
+		else if (full[i] == ']'){
+			break;
+		}
+		else {
+			end++;
+		}
+	}
+	
+	strncpy(result, &full[begin], end-begin);
+}
+
+int is_id(char *str){
+	return str[0] < '0' || str[0] > '9';
+}
+
+int verify_env(Node *n) {
+	char msg[100];
+	if(n->type == cID){
+		char *id = (char*) n->value;
+		if(env_get(top, id) == null){
+			sprintf(msg, "Variável \"%s\" não declarada", id);
+			yyerror(msg);
+			return 0;
+		}
+	}
+	
+	if(n->type == cARRAY){
+		char *id = (char*) n->value;
+		int flag = 0;
+		
+		if(env_get(top, id) == null){
+			sprintf(msg, "Variável \"%s\" não declarada", id);
+			yyerror(msg);
+			flag = 1;
+		}
+		
+		char *pos = (char*) n1(n)->value;
+		if(is_id(pos)){
+			if(env_get(top, pos) == null){
+				sprintf(msg, "Variável \"%s\" não declarada", pos);
+				yyerror(msg);
+				flag = 1;
+			}
+			if(strcmp(env_get(top, pos), "char") == 0){
+				sprintf(msg, "Variável \"%s\" é do tipo char, apenas inteiros são permitos em indices de arrays", pos);
+				yyerror(msg);
+				flag = 1;
+			}
+		}
+		
+		if(flag) return 0;
+	}
+	return 1;
+}
+
+// Busca o tipo do atributo mais a esquerda da expressão
+enum node_type get_type(Node *n);
+
+// Verifica se os argumentos passados a função corresponde aos da assinatura
+int compare_params_args(Node *params, Node *args);
+
 %}
 
+%union semrec{
+	int intval;
+	char *id;
+	struct lbs *lbs;
+}
+
+
 %token PROGRAMA
-%token CAR
-%token CARCONST
-%token IDENTIFICADOR
-%token INT
-%token INTCONST
+%token <id> CAR
+%token <id> CARCONST
+%token <id> IDENTIFICADOR
+%token <intval> INT
+%token <intval> INTCONST
 %token RETORNE
 %token LEIA
 %token ESCREVA
@@ -42,10 +179,8 @@
 %token FECHACOLCH
 %token VIRGULA
 %token PONTOVIRGULA
-%token ADICAO
-%token SUBTRACAO
-%token DIVISAO
-%token MULTIPLICACAO
+%left ADICAO SUBTRACAO
+%right MULTIPLICACAO DIVISAO
 %token MOD
 %token INTERROGACAO
 %token DOISPONTOS
@@ -57,17 +192,17 @@
 Programa:	DeclFuncVar DeclProg
 ;
 
-DeclFuncVar:	Tipo IDENTIFICADOR DeclVar PONTOVIRGULA DeclFuncVar
-		| Tipo IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar PONTOVIRGULA DeclFuncVar
-		| Tipo IDENTIFICADOR DeclFunc DeclFuncVar
+DeclFuncVar:	Tipo IDENTIFICADOR DeclVar PONTOVIRGULA DeclFuncVar {install($2)}
+		| Tipo IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar PONTOVIRGULA DeclFuncVar {install($2)}
+		| Tipo IDENTIFICADOR DeclFunc DeclFuncVar {install ($2);}
 		| /*Vazio*/
 ;
 
 DeclProg:	PROGRAMA Bloco
 ;
 
-DeclVar:	| VIRGULA IDENTIFICADOR DeclVar
-		| VIRGULA IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar
+DeclVar:	| VIRGULA IDENTIFICADOR DeclVar {install($2)}
+		| VIRGULA IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar {install($2)}
 		|/*Vazio*/
 ;
 
@@ -78,10 +213,10 @@ ListaParametros:	/*Vazio*/
 		| ListaParametrosCont
 ;
 
-ListaParametrosCont:	Tipo IDENTIFICADOR
-		| Tipo IDENTIFICADOR ABRECOLCH FECHACOLCH
-		| Tipo IDENTIFICADOR VIRGULA ListaParametrosCont
-		| Tipo IDENTIFICADOR ABRECOLCH FECHACOLCH VIRGULA ListaParametrosCont
+ListaParametrosCont:	Tipo IDENTIFICADOR {install($2)}
+		| Tipo IDENTIFICADOR ABRECOLCH FECHACOLCH {install($2)}
+		| Tipo IDENTIFICADOR VIRGULA ListaParametrosCont {install($2)}
+		| Tipo IDENTIFICADOR ABRECOLCH FECHACOLCH VIRGULA ListaParametrosCont {install($2)}
 ; 
 
 Bloco:		ABRECHAVE ListaDeclVar ListaComando FECHACHAVE
@@ -89,8 +224,8 @@ Bloco:		ABRECHAVE ListaDeclVar ListaComando FECHACHAVE
 ;
 
 ListaDeclVar:	
-		| Tipo IDENTIFICADOR DeclVar PONTOVIRGULA ListaDeclVar
-		| Tipo IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar PONTOVIRGULA ListaDeclVar
+		| Tipo IDENTIFICADOR DeclVar PONTOVIRGULA ListaDeclVar {install($2)}
+		| Tipo IDENTIFICADOR ABRECOLCH INTCONST FECHACOLCH DeclVar PONTOVIRGULA ListaDeclVar {install($2)}
 ;
 
 Tipo:		INT
@@ -156,19 +291,19 @@ MulExpr:	MulExpr MULTIPLICACAO UnExpr
 		| UnExpr
 ;
 
-UnExpr:		PrimExpr
+UnExpr:		SUBTRACAO PrimExpr
 		| NEGACAO PrimExpr
 		| PrimExpr
 ;
 
-LValueExpr:	IDENTIFICADOR ABRECOLCH Expr FECHACOLCH
-		| IDENTIFICADOR
+LValueExpr:	IDENTIFICADOR ABRECOLCH Expr FECHACOLCH {install($1)}
+		| IDENTIFICADOR {install($1)}
 ;
 
-PrimExpr:	IDENTIFICADOR ABREPAR ListExpr FECHAPAR
-		| IDENTIFICADOR ABREPAR FECHAPAR
-		| IDENTIFICADOR ABRECOLCH Expr FECHACOLCH
-		| IDENTIFICADOR
+PrimExpr:	IDENTIFICADOR ABREPAR ListExpr FECHAPAR {install($1)}
+		| IDENTIFICADOR ABREPAR FECHAPAR {install($1)}
+		| IDENTIFICADOR ABRECOLCH Expr FECHACOLCH {install($1)}
+		| IDENTIFICADOR {install($1)}
 		| CARCONST
 		| INTCONST
 		| ABREPAR Expr FECHAPAR
@@ -188,8 +323,13 @@ int main(int argc, char** argv){
 		exit(1);
 	}
 	yyin=fopen(argv[1], "rt");
+	errors = 0;
 	if(yyin)
-		return yyparse();
+		yyparse();
+		if(errors == 0){
+			print_code();
+			fetch_execute_cycle();
+		}
 	else
 		yyerror("Arquivo não encontrado.\n");
 	return 1;
